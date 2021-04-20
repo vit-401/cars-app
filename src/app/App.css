@@ -1,0 +1,9 @@
+.app {
+    background-color: #F8F7F8;
+}
+.container {
+    margin: 0 auto;
+    max-width: 1288px;
+    padding: 0 40px;
+}
+
