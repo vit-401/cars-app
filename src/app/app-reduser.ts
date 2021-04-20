@@ -1,10 +1,11 @@
 import {appAPI} from "../api/app-api";
+import {Dispatch} from "redux";
 
 
 export type CarType = {
     brand: string
     carNumber: string
-    engineType: engineType
+    engineType: engineTypes
     id: number
     model: string
 }
@@ -35,6 +36,7 @@ export const appReduser = (state = initialState, action: ActionsType): StateType
                 currentCar: action.car
             }
         case "SET_CARS":
+            debugger
             return {
                 ...state,
                 cars: action.cars
@@ -52,7 +54,7 @@ export const sortAC = (field: keyof CarType) => ({type: 'SORT', field} as const)
 export const deleteCarAC = (id: number) => ({type: 'DELETE-CAR', id} as const)
 export const addNewCarAC = (brand: string,
                             carNumber: string,
-                            engineType: engineType,
+                            engineType: engineTypes,
                             id: number,
                             model: string) => ({
     type: 'ADD-NEW-CAR',
@@ -69,9 +71,26 @@ export const getCarById = (id: number) => async (dispatch: any) => {
     dispatch(setCurrentCar(currentCar))
 }
 
-export const getCars = () => async (dispatch: any) => {
-    const cars = await appAPI.getCars()
-    dispatch(setCars(cars))
+export const getCars = () => (dispatch: Dispatch) => {
+    appAPI.getCars()
+        .then(res => {
+            let cars = res.data.cars
+            dispatch(setCars(cars))
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
+export const postCar = (brand: string, carNumber: string, engineType: engineTypes, model: string) => (dispatch: any) => {
+    appAPI.postCar(brand, carNumber, engineType, model)
+        .then(res => {
+            let cars = res
+            // dispatch(addNewCarAC(cars))
+            debugger
+        })
+        .catch(err => {
+            console.error(err)
+        })
 }
 
 
@@ -89,5 +108,5 @@ type ActionsType = SortACType
     | SetCurrentCar
 
 
-type engineType = "FUEL" | "GAS" | "HYBRID"
+export type engineTypes = "FUEL" | "GAS" | "HYBRID"
 

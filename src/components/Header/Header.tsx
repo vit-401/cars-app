@@ -3,7 +3,7 @@ import style from './Header.module.css'
 import logo from '../../common/img/icons/carIcon.svg'
 import goOutIcon from '../../common/img/icons/goOutIcon.png'
 
-export function Header() {
+export const Header = React.memo(() => {
     return <header className={style.header}>
         <div className={"container"}>
             <div className={style.headerInner}>
@@ -13,10 +13,10 @@ export function Header() {
                 <div className={style.headerItem}>
                     <div className="headerTitle">Username</div>
                     <button className={style.goOut}>
-                        <img  src={goOutIcon} alt=""/>
+                        <img src={goOutIcon} alt=""/>
                     </button>
                 </div>
             </div>
         </div>
     </header>;
-}
+})

@@ -100,15 +100,20 @@
     justify-content: space-between;
 }
 
-.btnsWrap > button {
-    background-color: transparent;
-    border: none;
+.btnsWrap > a {
+    cursor: pointer;
 }
 
-.btnsWrap > button > img {
+.actionBtn {
+    background-color: transparent;
+    border: none;
     cursor: pointer;
-    width: 20px;
 
+}
+
+.actionBtn > img {
+    width: 20px;
+    cursor: pointer;
 }
 
 .pagesControlArea > img {
@@ -143,10 +148,12 @@
     justify-content: space-between;
     width: 60px;
 }
-.pagesControlArea > img{
+
+.pagesControlArea > img {
     cursor: pointer;
 }
-.pagesControlArea > button{
+
+.pagesControlArea > button {
     cursor: pointer;
     background-color: transparent;
     border: none;

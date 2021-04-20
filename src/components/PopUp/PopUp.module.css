@@ -10,6 +10,7 @@
     margin: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
+
 .popUp > form {
     display: flex;
     justify-content: space-between;
@@ -63,7 +64,7 @@ form {
     border-radius: 4px 4px 0px 0px;
     padding: 5px 15px;
     font-size: 16px;
-    color: rgba(19, 19, 19, 0.5);;
+    color: #000000;
 }
 
 .popupBts {
@@ -71,7 +72,8 @@ form {
     display: flex;
     justify-content: flex-end;
 }
-.popupBts > button{
+
+.popupBts > button {
     text-transform: uppercase;
     cursor: pointer;
     font-weight: bold;
@@ -81,13 +83,15 @@ form {
     max-width: 104px;
     padding: 4px 10px;
 }
-.popupBts > button:first-child{
+
+.popupBts > button:first-child {
     border: 1px solid #22B2BE;
     border-radius: 4px;
     color: #26253D;
     background-color: #fff;
 }
-.popupBts > button:last-child{
+
+.popupBts > button:last-child {
 
     background-color: #22B2BE;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.25);

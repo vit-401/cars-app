@@ -1,4 +1,4 @@
-import {appReduser, sortAC, StateType} from "../app/app-reduser";
+import {appReduser, deleteCarAC, sortAC, StateType} from "../app/app-reduser";
 
 const initialState: StateType = {
     "cars": [
@@ -102,4 +102,9 @@ test('is mutating state', () => {
     expect(endState["cars"] !== startState["cars"]).toBe(true);
     expect(endState["cars"][0] !== startState["cars"][0]).toBe(true);
 
+});
+test('delete item car', () => {
+    const startState = initialState
+    const endState = appReduser(startState, deleteCarAC(821))
+    expect(endState["cars"].length).toBe(8);
 });

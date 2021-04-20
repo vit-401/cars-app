@@ -1,9 +1,10 @@
 import axios from 'axios'
-import {CarType} from "../app/app-reduser";
+import {CarType, engineTypes} from "../app/app-reduser";
 
 const instance = axios.create({
     baseURL: 'https://test-backend.esverito.com/',
-    withCredentials: true
+    withCredentials: false,
+
 
 })
 const CARS: CarType[] = [
@@ -72,11 +73,19 @@ const CARS: CarType[] = [
     }
 ]
 export const appAPI = {
-    async getCars(): Promise<CarType[]> {
-        return CARS
+    async getCars() {
+        return instance.get('api/car')
     },
     async getCarById(id: number): Promise<CarType> {
         return CARS.find(car => car.id === id) as CarType
+    },
+    async postCar(brand: string, carNumber: string, engineType: engineTypes, model: string): Promise<CarType> {
+        return instance.post('api/car', {
+            brand,
+            carNumber,
+            engineType,
+            model
+        })
     }
 }
 

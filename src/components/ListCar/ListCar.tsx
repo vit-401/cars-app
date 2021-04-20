@@ -14,25 +14,22 @@ export const ListCar = React.memo(() => {
 
     let [status, setStatusPopup] = useState<any>('ADD')
     let dataCars = useSelector<AppRootStateType, CarType[]>((state) => state.cars.cars)
-    debugger
-
-
     const dispatch = useDispatch()
     const history = useHistory()
 
     const changeSortValue: ChangeEventHandler<HTMLSelectElement> = useCallback(
-         (e) => {
-        let value: any = e.currentTarget.value
-        dispatch(sortAC(value))
-    },[dataCars])
+        (e) => {
+            let value: any = e.currentTarget.value
+            dispatch(sortAC(value))
+        }, [])
 
     useEffect(() => {
         dispatch(getCars())
     }, [])
 
-    const closePopUp = () => {
+    const closePopUp = useCallback(() => {
         history.push('/')
-    }
+    }, [])
 
     return <section className={style.listCar}>
 

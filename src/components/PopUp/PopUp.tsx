@@ -1,9 +1,9 @@
-import React, {useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
 import style from "./PopUp.module.css";
 import clearPopup from "../../common/img/icons/clearPopUpIcon.png"
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {addNewCarAC, CarType, getCarById, setCurrentCar} from "../../app/app-reduser";
+import {CarType, getCarById, postCar, setCurrentCar} from "../../app/app-reduser";
 import {useParams} from "react-router-dom";
 import {AppRootStateType} from "../../app/store";
 
@@ -21,13 +21,14 @@ export type PopUpPropsType = {
     status: "EDIT" | "ADD"
 }
 
-export const PopUp: React.FC<PopUpPropsType> = (props) => {
+export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
+    const dispatch = useDispatch()
 
-    const {id} = useParams<{id: string}>()
-    let title = id ? 'EDIT CAR INFORMATION' :  'ADD A NEW CAR'
+    const {id} = useParams<{ id: string }>()
+    let title = id ? 'EDIT CAR INFORMATION' : 'ADD A NEW CAR'
     const currentCar = useSelector<AppRootStateType, CarType | null>(state => state.cars.currentCar)
     useEffect(() => {
-        if(id){
+        if (id) {
             dispatch(getCarById(+id))
         }
         return () => {
@@ -36,14 +37,13 @@ export const PopUp: React.FC<PopUpPropsType> = (props) => {
     }, [id])
 
     useEffect(() => {
-        if(currentCar){
+        if (currentCar) {
             formik.setFieldValue('brand', currentCar.brand)
             formik.setFieldValue('model', currentCar.model)
             formik.setFieldValue('carNumber', currentCar.carNumber)
             formik.setFieldValue('engineType', currentCar.engineType)
         }
     }, [currentCar])
-    const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
             brand: currentCar?.brand,
@@ -68,20 +68,19 @@ export const PopUp: React.FC<PopUpPropsType> = (props) => {
             return errors;
         },
         onSubmit: (values: any) => {
-            alert(JSON.stringify(values))
-            if(id){
-                //update
+            if (id) {
+
             } else {
-                dispatch(addNewCarAC(values.brand, values.carNum, values.engType, 123, values.model))
+                dispatch(postCar(values.brand, values.carNumber, values.engineType, values.model))
             }
             formik.resetForm()
         },
     })
 
-    let closePopup = () => {
+    let closePopup = useCallback(() => {
         props.closePopup &&
         props.closePopup(false)
-    }
+    }, [])
     return <div className={style.popUp}>
         <form onSubmit={formik.handleSubmit}>
             <div className={style.popupInner}>
@@ -129,4 +128,4 @@ export const PopUp: React.FC<PopUpPropsType> = (props) => {
 
         </form>
     </div>
-}
+})
