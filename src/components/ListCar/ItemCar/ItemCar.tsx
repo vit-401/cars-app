@@ -2,7 +2,7 @@ import style from "../ListCar.module.css";
 import createIcon from "../../../common/img/icons/CreateIcon.png";
 import deleteIcon from "../../../common/img/icons/deleteIcon.png";
 import React, {useCallback} from "react";
-import {deleteCarAC} from "../../../app/app-reduser";
+import {deleteCarTC} from "../../../app/app-reduser";
 import {useDispatch} from "react-redux";
 import {NavLink} from "react-router-dom";
 
@@ -20,8 +20,10 @@ export const ItemCar: React.FC<ItemCarPropsType> = React.memo((props) => {
     const dispatch = useDispatch()
 
     const deleteCar = useCallback(() => {
-        dispatch(deleteCarAC(props.id))
-    }, [props.id])
+        dispatch(deleteCarTC(+props.id))
+    }, [])
+
+
     return <li>
         <div className={style.carTitle}>{props.brand}</div>
         <div className={style.carTitle}>{props.carNumber}</div>

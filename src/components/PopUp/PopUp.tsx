@@ -3,7 +3,7 @@ import style from "./PopUp.module.css";
 import clearPopup from "../../common/img/icons/clearPopUpIcon.png"
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {CarType, getCarById, postCar, setCurrentCar} from "../../app/app-reduser";
+import {CarType, getCarById, postCar, setCurrentCar, updateCarTC} from "../../app/app-reduser";
 import {useParams} from "react-router-dom";
 import {AppRootStateType} from "../../app/store";
 
@@ -11,7 +11,7 @@ type FormikErrorType = {
     brand?: string
     model?: string
     carNumber?: string
-    engineType?: string
+    engineType: string
 }
 
 
@@ -30,6 +30,7 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
     useEffect(() => {
         if (id) {
             dispatch(getCarById(+id))
+            debugger
         }
         return () => {
             dispatch(setCurrentCar(null))
@@ -44,36 +45,59 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
             formik.setFieldValue('engineType', currentCar.engineType)
         }
     }, [currentCar])
+
+    const validate = (values: FormikErrorType) => {
+        const errors: any = {}
+        if (!values.brand) {
+            errors.brand = "Required"
+        }
+        if (!values.engineType) {
+            errors.engineType = "Required"
+        }
+        // @ts-ignore
+        if (values.engineType && values.engineType.toString() !== 'GAS') {
+            errors.engineType = "sfbdkfj"
+        }
+
+
+        // if ( values.engineType !== 'GAS' || values.engineType !== 'FUEL' || values.engineType!== 'HYBRID' ) {
+        //             errors.engineType = "Engine type must be correct"
+        //         }
+
+
+        // else if (  values.engineType !== "HYBRID") {
+        //     errors.engineType = "Engine type must be correct"
+        // }
+        // else if (values.engineType !== "HYBRID") {
+        //     errors.engineType = "Engine type must be correct"
+        // } else if (values.engineType !== "GAS") {
+        //     errors.engineType = "Engine type must be correct"
+        // }
+        if (!values.model) {
+            errors.model = "Required"
+        }
+        if (!values.carNumber) {
+            errors.carNumber = "Required"
+        }
+        return errors;
+    }
+
     const formik = useFormik({
         initialValues: {
-            brand: currentCar?.brand,
-            model: currentCar?.model,
-            carNumber: currentCar?.carNumber,
-            engineType: currentCar?.engineType
+            brand: currentCar ? currentCar.brand : '',
+            model: currentCar ? currentCar.model : '',
+            carNumber: currentCar ? currentCar.carNumber : '',
+            engineType: currentCar ? currentCar.engineType : ''
         },
-        validate: (values: FormikErrorType) => {
-            const errors: FormikErrorType = {};
-            if (!values.brand) {
-                errors.brand = "Required"
-            }
-            if (!values.engineType) {
-                errors.engineType = "Required"
-            }
-            if (!values.model) {
-                errors.model = "Required"
-            }
-            if (!values.carNumber) {
-                errors.carNumber = "Required"
-            }
-            return errors;
-        },
-        onSubmit: (values: any) => {
+        validate,
+        onSubmit: (values: any, actions: any) => {
             if (id) {
-
+                dispatch(updateCarTC(+id, values.brand, values.carNumber, values.engineType, values.model))
             } else {
                 dispatch(postCar(values.brand, values.carNumber, values.engineType, values.model))
             }
-            formik.resetForm()
+            actions.resetForm()
+            alert('hey')
         },
     })
 
@@ -106,6 +130,7 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
                 }
                 <div className={style.popupItem}>
                     <input type="text"
+
                            {...formik.getFieldProps('brand')}
                            placeholder={"Brand"}/>
                     <input type="text"

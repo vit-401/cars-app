@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 import {CarType, engineTypes} from "../app/app-reduser";
 
 const instance = axios.create({
@@ -73,26 +73,33 @@ const CARS: CarType[] = [
     }
 ]
 export const appAPI = {
-    async getCars() {
+    getCars(): Promise<AxiosResponse<{ cars: [CarType] }>> {
         return instance.get('api/car')
     },
-    async getCarById(id: number): Promise<CarType> {
-        return CARS.find(car => car.id === id) as CarType
+    getCarById(id: number): Promise<AxiosResponse<{ car: CarType }>> {
+        return instance.get(`api/car/${id}`)
     },
-    async postCar(brand: string, carNumber: string, engineType: engineTypes, model: string): Promise<CarType> {
+    postCar(brand: string, carNumber: string, engineType: engineTypes, model: string): Promise<AxiosResponse<{ car: CarType }>> {
         return instance.post('api/car', {
             brand,
             carNumber,
             engineType,
             model
         })
-    }
+    },
+    deleteCar(id: number): Promise<AxiosResponse<any>> {
+        return instance.delete(`api/car/${id}`)
+    },
+    updateCar(id: number, brand: string, carNumber: string, engineType: engineTypes, model: string): Promise<AxiosResponse<{ car: CarType }>> {
+        return instance.put(`api/car/${id}`, {
+            brand,
+            carNumber,
+            engineType,
+            model
+        })
+    },
 }
 
-export type GetDataCarsType = {
-    brand: string
-    carNumber: string
-    engineType: "FUEL" | "GAS" | "HYBRID"
-    id: number
-    model: string
-}
+
+
+
