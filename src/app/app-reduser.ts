@@ -17,9 +17,9 @@ const initialState: StateType = {
 export type StateType = {
     cars: CarType[]
     currentCar: CarType | null
-    preloader?: boolean
+    preloader: boolean
 }
-export const appReduser = (state = initialState, action: ActionsType): StateType => {
+export const appReducer = (state = initialState, action: ActionsType): StateType => {
     switch (action.type) {
         case 'SORT':
             let newCars = [...state.cars]
@@ -70,78 +70,79 @@ export const sortAC = (field: keyof CarType) => ({type: 'SORT', field} as const)
 export const deleteCarAC = (id: number) => ({type: 'DELETE-CAR', id} as const)
 export const addNewCarAC = (newCar: CarType) => ({type: 'ADD-NEW-CAR', newCar} as const)
 export const updateCarAC = (updateCar: CarType) => ({type: 'UPDATE-CAR', updateCar} as const)
-export const tooglePreloader = (value: boolean) => ({type: 'LOADING', value} as const)
+export const togglePreloader = (value: boolean) => ({type: 'LOADING', value} as const)
 
 
-export const getCarById = (id: number) => async (dispatch: any) => {
-    dispatch(tooglePreloader(true))
-    appAPI.getCarById(id)
-        .then(res => {
-            let currentCar = res.data.car
-            dispatch(setCurrentCar(currentCar))
-            dispatch(tooglePreloader(false))
-        })
-        .catch(err => {
-            console.log(err)
-            dispatch(tooglePreloader(false))
-        })
+export const getCarById = (id: number) => async (dispatch: Dispatch) => {
+    dispatch(togglePreloader(true))
+    try {
+        const res = await appAPI.getCarById(id)
+        let currentCar = res.data.car
+        dispatch(setCurrentCar(currentCar))
+        dispatch(togglePreloader(false))
+
+    } catch (err) {
+        console.error(err)
+        dispatch(togglePreloader(false))
+    }
 }
 
-export const getCars = () => (dispatch: Dispatch) => {
-    dispatch(tooglePreloader(true))
-    appAPI.getCars()
-        .then(res => {
-            let cars = res.data.cars
-            dispatch(setCars(cars))
-            dispatch(tooglePreloader(false))
-        })
-        .catch(err => {
-            console.error(err)
-            dispatch(tooglePreloader(false))
-        })
+export const getCars = () => async (dispatch: Dispatch) => {
+    dispatch(togglePreloader(true))
+    try {
+        const res = await appAPI.getCars()
+        let cars = res.data.cars
+        dispatch(setCars(cars))
+        dispatch(togglePreloader(false))
+    } catch (err) {
+        console.error(err)
+        dispatch(togglePreloader(false))
+    }
 }
 
-export const deleteCarTC = (id: number) => (dispatch: Dispatch) => {
-    dispatch(tooglePreloader(true))
-    appAPI.deleteCar(id)
-        .then(res => {
-            if (res.status === 200) {
-                dispatch(deleteCarAC(id))
-                dispatch(tooglePreloader(false))
-            }
-        })
-        .catch(err => {
-            console.error(err)
-            dispatch(tooglePreloader(false))
-        })
+
+export const deleteCarTC = (id: number) => async (dispatch: Dispatch) => {
+    dispatch(togglePreloader(true))
+    try {
+        const res = await appAPI.deleteCar(id)
+        if (res.status === 200) {
+            dispatch(deleteCarAC(id))
+            dispatch(togglePreloader(false))
+        }
+    } catch (err) {
+        console.error(err)
+        dispatch(togglePreloader(false))
+    }
 }
 
-export const updateCarTC = (id: number, brand: string, carNumber: string, engineType: engineTypes, model: string) => (dispatch: Dispatch) => {
-    dispatch(tooglePreloader(true))
-    appAPI.updateCar(id, brand, carNumber, engineType, model)
-        .then(res => {
-            let updateCar = res.data.car
-            dispatch(updateCarAC(updateCar))
-            dispatch(tooglePreloader(false))
-        })
-        .catch(err => {
-            console.error(err)
-            dispatch(tooglePreloader(false))
-        })
+export const updateCarTC = (id: number,
+                            brand: string,
+                            carNumber: string,
+                            engineType: engineTypes,
+                            model: string) => async (dispatch: Dispatch) => {
+    dispatch(togglePreloader(true))
+    try {
+        const res = await appAPI.updateCar(id, brand, carNumber, engineType, model)
+        let updateCar = res.data.car
+        dispatch(updateCarAC(updateCar))
+        dispatch(togglePreloader(false))
+    } catch (err) {
+        console.error(err)
+        dispatch(togglePreloader(false))
+    }
 }
 
-export const postCar = (brand: string, carNumber: string, engineType: engineTypes, model: string) => (dispatch: any) => {
-    dispatch(tooglePreloader(true))
-    appAPI.postCar(brand, carNumber, engineType, model)
-        .then(res => {
-            let cars = res.data.car
-            dispatch(addNewCarAC(cars))
-            dispatch(tooglePreloader(false))
-        })
-        .catch(err => {
-            console.error(err)
-            dispatch(tooglePreloader(false))
-        })
+export const postCar = (brand: string, carNumber: string, engineType: engineTypes, model: string) => async (dispatch: Dispatch) => {
+    dispatch(togglePreloader(true))
+    try {
+        const res = await appAPI.postCar(brand, carNumber, engineType, model)
+        let cars = res.data.car
+        dispatch(addNewCarAC(cars))
+        dispatch(togglePreloader(false))
+    } catch (err) {
+        console.error(err)
+        dispatch(togglePreloader(false))
+    }
 }
 
 
@@ -153,7 +154,7 @@ export type AddNewCarACType = ReturnType<typeof addNewCarAC>
 export type SetCurrentCar = ReturnType<typeof setCurrentCar>
 export type SetCars = ReturnType<typeof setCars>
 export type UpdateCars = ReturnType<typeof updateCarAC>
-export type TooglePreloader = ReturnType<typeof tooglePreloader>
+export type TooglePreloader = ReturnType<typeof togglePreloader>
 type ActionsType = SortACType
     | DeleteCarACType
     | AddNewCarACType

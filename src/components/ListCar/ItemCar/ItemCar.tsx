@@ -1,10 +1,11 @@
 import style from "../ListCar.module.css";
-import createIcon from "../../../common/img/icons/CreateIcon.png";
-import deleteIcon from "../../../common/img/icons/deleteIcon.png";
-import React, {useCallback} from "react";
+import createIcon from "../../../assets/img/icons/CreateIcon.png";
+import deleteIcon from "../../../assets/img/icons/deleteIcon.png";
+import React from "react";
 import {deleteCarTC} from "../../../app/app-reduser";
 import {useDispatch} from "react-redux";
 import {NavLink} from "react-router-dom";
+import {Status} from "../../PopUp/PopUp";
 
 export type ItemCarPropsType = {
     brand: string
@@ -12,16 +13,16 @@ export type ItemCarPropsType = {
     engineType: "FUEL" | "GAS" | "HYBRID"
     id: number
     model: string
-    setStatusPopup: (s: string) => void
+    setStatusPopup: (s: Status) => void
 }
 
 export const ItemCar: React.FC<ItemCarPropsType> = React.memo((props) => {
 
     const dispatch = useDispatch()
 
-    const deleteCar = useCallback(() => {
+    const deleteCar = () => {
         dispatch(deleteCarTC(+props.id))
-    }, [])
+    }
 
 
     return <li>
@@ -42,9 +43,7 @@ export const ItemCar: React.FC<ItemCarPropsType> = React.memo((props) => {
                     <img src={deleteIcon} alt="deleteIcon"/>
                 </button>
 
-
             </div>
         </div>
     </li>;
-
 })

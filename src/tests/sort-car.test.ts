@@ -69,7 +69,8 @@ const initialState: StateType = {
 
 
     ],
-    currentCar: null
+    currentCar: null,
+    preloader: false
 }
 test('sort by id', () => {
     const startState = initialState

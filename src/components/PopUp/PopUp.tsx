@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect} from "react";
 import style from "./PopUp.module.css";
-import clearPopup from "../../common/img/icons/clearPopUpIcon.png"
+import clearPopup from "../../assets/img/icons/clearPopUpIcon.png"
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
 import {CarType, getCarById, postCar, setCurrentCar, updateCarTC} from "../../app/app-reduser";
 import {useParams} from "react-router-dom";
 import {AppRootStateType} from "../../app/store";
-
+export type Status = "EDIT" | "ADD"
 type FormikErrorType = {
     brand?: string
     model?: string
@@ -18,7 +18,7 @@ type FormikErrorType = {
 export type PopUpPropsType = {
     closePopup?: (s: boolean) => void
     id?: number
-    status: "EDIT" | "ADD"
+    status: Status
 }
 
 export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
@@ -30,7 +30,6 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
     useEffect(() => {
         if (id) {
             dispatch(getCarById(+id))
-            debugger
         }
         return () => {
             dispatch(setCurrentCar(null))
@@ -57,7 +56,7 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
         }
 
         if (valueEngineType && (valueEngineType !== 'FUEL') && (valueEngineType !== 'GAS') && (valueEngineType !== 'HYBRID')) {
-            errors.engineType = "engineType shood be correct"
+            errors.engineType = "engine type must be correct: fuel, gas, hybrid"
         }
 
         if (!values.model) {

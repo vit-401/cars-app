@@ -1,31 +1,30 @@
 import React, {ChangeEventHandler, useCallback, useEffect, useState} from "react";
 import style from "./ListCar.module.css";
-import rightArr from '../../common/img/icons/dropRightArrow.png'
-import leftArr from '../../common/img/icons/dropLeftArrow.png'
+import rightArr from '../../assets/img/icons/dropRightArrow.png'
+import leftArr from '../../assets/img/icons/dropLeftArrow.png'
 import {ItemCar} from "./ItemCar/ItemCar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
 import {CarType, getCars, sortAC} from "../../app/app-reduser";
-import {PopUp} from "../PopUp/PopUp";
+import {PopUp, Status} from "../PopUp/PopUp";
 import {NavLink, Route, useHistory} from "react-router-dom";
 
 
 export const ListCar = React.memo(() => {
 
-    let [status, setStatusPopup] = useState<any>('ADD')
+    let [status, setStatusPopup] = useState<Status>('ADD')
     let dataCars = useSelector<AppRootStateType, CarType[]>((state) => state.cars.cars)
     const dispatch = useDispatch()
     const history = useHistory()
 
-    const changeSortValue: ChangeEventHandler<HTMLSelectElement> = useCallback(
-        (e) => {
-            let value: any = e.currentTarget.value
-            dispatch(sortAC(value))
-        }, [])
-
     useEffect(() => {
         dispatch(getCars())
     }, [])
+
+    const changeSortValue: ChangeEventHandler<HTMLSelectElement> = (e) => {
+        let value: any = e.currentTarget.value
+        dispatch(sortAC(value))
+    }
 
     const closePopUp = useCallback(() => {
         history.push('/')
@@ -61,7 +60,7 @@ export const ListCar = React.memo(() => {
                     <li>Actions</li>
                 </ul>
                 <ul className={style.listCarColumn}>
-                    {dataCars.map((i: any) => {
+                    {dataCars.map((i: CarType) => {
                         return <ItemCar key={i.id}
                                         brand={i.brand}
                                         carNumber={i.carNumber}
