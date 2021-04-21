@@ -48,31 +48,18 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
 
     const validate = (values: FormikErrorType) => {
         const errors: any = {}
+        let valueEngineType = values.engineType.toUpperCase()
         if (!values.brand) {
             errors.brand = "Required"
         }
         if (!values.engineType) {
             errors.engineType = "Required"
         }
-        // @ts-ignore
-        if (values.engineType && values.engineType.toString() !== 'GAS') {
-            errors.engineType = "sfbdkfj"
+
+        if (valueEngineType && (valueEngineType !== 'FUEL') && (valueEngineType !== 'GAS') && (valueEngineType !== 'HYBRID')) {
+            errors.engineType = "engineType shood be correct"
         }
 
-
-        // if ( values.engineType !== 'GAS' || values.engineType !== 'FUEL' || values.engineType!== 'HYBRID' ) {
-        //             errors.engineType = "Engine type must be correct"
-        //         }
-
-
-        // else if (  values.engineType !== "HYBRID") {
-        //     errors.engineType = "Engine type must be correct"
-        // }
-        // else if (values.engineType !== "HYBRID") {
-        //     errors.engineType = "Engine type must be correct"
-        // } else if (values.engineType !== "GAS") {
-        //     errors.engineType = "Engine type must be correct"
-        // }
         if (!values.model) {
             errors.model = "Required"
         }
@@ -92,12 +79,11 @@ export const PopUp: React.FC<PopUpPropsType> = React.memo((props) => {
         validate,
         onSubmit: (values: any, actions: any) => {
             if (id) {
-                dispatch(updateCarTC(+id, values.brand, values.carNumber, values.engineType, values.model))
+                dispatch(updateCarTC(+id, values.brand, values.carNumber, values.engineType.toUpperCase(), values.model))
             } else {
-                dispatch(postCar(values.brand, values.carNumber, values.engineType, values.model))
+                dispatch(postCar(values.brand, values.carNumber, values.engineType.toUpperCase(), values.model))
             }
             actions.resetForm()
-            alert('hey')
         },
     })
 

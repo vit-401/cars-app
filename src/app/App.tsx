@@ -10,7 +10,7 @@ export const App = React.memo(() => {
     let loading = useSelector<AppRootStateType>(state => state.cars.preloader)
 
     return <div className={"app"}>
-        {/*{loading ? <Prealoder/> : null}*/}
+        {loading ? <Prealoder/> : null}
         <Header/>
         <ListCar/>
     </div>

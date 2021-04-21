@@ -99,7 +99,6 @@ export const getCars = () => (dispatch: Dispatch) => {
             console.error(err)
             dispatch(tooglePreloader(false))
         })
-    // dispatch(tooglePreloader(false))
 }
 
 export const deleteCarTC = (id: number) => (dispatch: Dispatch) => {
@@ -137,6 +136,7 @@ export const postCar = (brand: string, carNumber: string, engineType: engineType
         .then(res => {
             let cars = res.data.car
             dispatch(addNewCarAC(cars))
+            dispatch(tooglePreloader(false))
         })
         .catch(err => {
             console.error(err)
