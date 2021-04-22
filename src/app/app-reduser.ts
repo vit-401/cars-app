@@ -1,7 +1,7 @@
 import {appAPI} from "../api/app-api";
 import {Dispatch} from "redux";
 
-
+export type engineTypes = "FUEL" | "GAS" | "HYBRID"
 export type CarType = {
     brand: string
     carNumber: string
@@ -164,5 +164,4 @@ type ActionsType = SortACType
     | TooglePreloader
 
 
-export type engineTypes = "FUEL" | "GAS" | "HYBRID"
 
